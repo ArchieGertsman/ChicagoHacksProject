@@ -12,7 +12,7 @@ import UserNotifications
 
 class WeatherController: UIViewController {
     
-    static var current_location = CLLocation()
+    static var current_location = CLLocationCoordinate2D()
     let location_manager = CLLocationManager()
     static let key = "7d3b895abc519439bab335bae1d8f21e"
     var today_max_temp: Int!
@@ -33,7 +33,7 @@ class WeatherController: UIViewController {
     }
     var feels_like_temperature: Double! {
         didSet {
-            self.feels_like_temperature_label.text = "feels like \(Int(feels_like_temperature!))"
+            self.feels_like_temperature_label.text = "feels like \(Int(feels_like_temperature!))°"
         }
     }
     var precipitation_chance: Double! {

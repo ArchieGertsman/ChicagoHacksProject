@@ -15,8 +15,8 @@ extension WeatherController {
     func initAppearence() {
         let current_hour = Calendar.current.component(.hour, from: Date())
         
-        let latitude = WeatherController.current_location.coordinate.latitude
-        let longitude = WeatherController.current_location.coordinate.longitude
+        let latitude = WeatherController.current_location.latitude
+        let longitude = WeatherController.current_location.longitude
         
         print("https://api.darksky.net/forecast/\(WeatherController.key)/\(latitude),\(longitude)")
         
@@ -205,8 +205,8 @@ extension WeatherController {
     }
     
     static func getTodaysMessage(completion: @escaping (_ title: String?, _ message: String?) -> Void) {
-        let latitude = WeatherController.current_location.coordinate.latitude
-        let longitude = WeatherController.current_location.coordinate.longitude
+        let latitude = WeatherController.current_location.latitude
+        let longitude = WeatherController.current_location.longitude
         
         let seconds_in_a_day = 60 * 60 * 24
         let yesterday_time = Int(NSDate().timeIntervalSince1970) - seconds_in_a_day
@@ -417,7 +417,7 @@ extension WeatherController: CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let loc_value = manager.location!.coordinate
-        WeatherController.current_location = CLLocation(latitude: loc_value.latitude, longitude: loc_value.longitude)
+        WeatherController.current_location = loc_value
         DispatchQueue.main.async {
             self.initAppearence()
             self.location_manager.stopUpdatingLocation()
