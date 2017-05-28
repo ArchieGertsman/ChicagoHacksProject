@@ -60,9 +60,9 @@ extension WeatherController {
                 case "snow", "sleet":
                     self.initDetails("Snow", #imageLiteral(resourceName: "Snow"), #imageLiteral(resourceName: "Gradient_Rain"))
                 case "cloudy":
-                    self.initDetails("Cloudy", #imageLiteral(resourceName: "Clouds"), #imageLiteral(resourceName: "Gradient_Sunrise"))
+                    self.initDetails("Cloudy", #imageLiteral(resourceName: "Clouds"), #imageLiteral(resourceName: "Gradient_Day"))
                 case "partly-cloudy-day":
-                    self.initDetails("Partly Cloudy", #imageLiteral(resourceName: "CloudSun"), #imageLiteral(resourceName: "Gradient_Sunrise"))
+                    self.initDetails("Partly Cloudy", #imageLiteral(resourceName: "CloudSun"), #imageLiteral(resourceName: "Gradient_Day"))
                 default:
                     self.initDetails("Sunny", #imageLiteral(resourceName: "Sun"), #imageLiteral(resourceName: "Gradient_Day"))
                 }
@@ -87,6 +87,11 @@ extension WeatherController {
             else {
                 self.initDetails("Night", #imageLiteral(resourceName: "Moon"), #imageLiteral(resourceName: "Gradient_Night"))
             }
+            
+            // pop-up that describes the event creation error
+            let alert = UIAlertController(title: "Hey!", message: self.array[Int(arc4random_uniform(3))], preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Will do!", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
             
         })
 
@@ -451,6 +456,23 @@ extension WeatherController: UIViewControllerTransitioningDelegate {
     func interactionControllerForDismissal(animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
         guard !disableInteractivePlayerTransitioning else { return nil }
         return dismissInteractor
+    }
+}
+
+extension String {
+    
+    subscript (i: Int) -> Character {
+        return self[index(startIndex, offsetBy: i)]
+    }
+    
+    subscript (i: Int) -> String {
+        return String(self[i] as Character)
+    }
+    
+    subscript (r: Range<Int>) -> String {
+        let start = index(startIndex, offsetBy: r.lowerBound)
+        let end = index(startIndex, offsetBy: r.upperBound - r.lowerBound)
+        return self[Range(start ..< end)]
     }
 }
 

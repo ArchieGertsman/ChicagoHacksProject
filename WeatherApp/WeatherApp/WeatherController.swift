@@ -25,6 +25,16 @@ class WeatherController: UIViewController {
     var presentInteractor: MiniToLargeViewInteractive!
     var dismissInteractor: MiniToLargeViewInteractive!
     
+    var array: [String] = {
+        var array = [String]()
+        array.append("Make sure to use public transportaion when possible.")
+        array.append("Remember to carpool.")
+        array.append("Consider buying an electric vehicle.")
+        array.append("Talk to your representatives about climate change.")
+        return array
+    }()
+    
+    
     // data
     var current_temperature: Double! {
         didSet {
