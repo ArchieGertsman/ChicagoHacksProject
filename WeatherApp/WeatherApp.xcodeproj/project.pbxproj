@@ -13,7 +13,8 @@
 		E60A588D1EDA714100AAEF49 /* BottomBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60A58871EDA714100AAEF49 /* BottomBar.swift */; };
 		E60A588E1EDA714100AAEF49 /* MiniToLargeViewAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60A58881EDA714100AAEF49 /* MiniToLargeViewAnimator.swift */; };
 		E60A588F1EDA714100AAEF49 /* MiniToLargeViewInteractive.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60A58891EDA714100AAEF49 /* MiniToLargeViewInteractive.swift */; };
-		E60A58901EDA714100AAEF49 /* NextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60A588A1EDA714100AAEF49 /* NextViewController.swift */; };
+		E60A58901EDA714100AAEF49 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60A588A1EDA714100AAEF49 /* SettingsController.swift */; };
+		E60A589C1EDAB58300AAEF49 /* SFDisplay-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = E60A589B1EDAB58300AAEF49 /* SFDisplay-Thin.otf */; };
 		E6E10BB71ED9F79E00EB2242 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E10BB61ED9F79E00EB2242 /* AppDelegate.swift */; };
 		E6E10BBC1ED9F79E00EB2242 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E6E10BBA1ED9F79E00EB2242 /* Main.storyboard */; };
 		E6E10BBE1ED9F79E00EB2242 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E6E10BBD1ED9F79E00EB2242 /* Assets.xcassets */; };
@@ -54,7 +55,8 @@
 		E60A58871EDA714100AAEF49 /* BottomBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BottomBar.swift; path = "../../../../Downloads/DraggableViewController-master/DraggableViewController/BottomBar.swift"; sourceTree = "<group>"; };
 		E60A58881EDA714100AAEF49 /* MiniToLargeViewAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MiniToLargeViewAnimator.swift; path = "../../../../Downloads/DraggableViewController-master/DraggableViewController/MiniToLargeViewAnimator.swift"; sourceTree = "<group>"; };
 		E60A58891EDA714100AAEF49 /* MiniToLargeViewInteractive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MiniToLargeViewInteractive.swift; path = "../../../../Downloads/DraggableViewController-master/DraggableViewController/MiniToLargeViewInteractive.swift"; sourceTree = "<group>"; };
-		E60A588A1EDA714100AAEF49 /* NextViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NextViewController.swift; path = "../../../../Downloads/DraggableViewController-master/DraggableViewController/NextViewController.swift"; sourceTree = "<group>"; };
+		E60A588A1EDA714100AAEF49 /* SettingsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsController.swift; path = "../../../../Downloads/DraggableViewController-master/DraggableViewController/SettingsController.swift"; sourceTree = "<group>"; };
+		E60A589B1EDAB58300AAEF49 /* SFDisplay-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SFDisplay-Thin.otf"; path = "WeatherApp/res/SFDisplay-Thin.otf"; sourceTree = "<group>"; };
 		E6E10BB31ED9F79E00EB2242 /* WeatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6E10BB61ED9F79E00EB2242 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E6E10BBB1ED9F79E00EB2242 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -114,9 +116,18 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		E60A58971EDAB3E600AAEF49 /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+				E60A589B1EDAB58300AAEF49 /* SFDisplay-Thin.otf */,
+			);
+			name = fonts;
+			sourceTree = "<group>";
+		};
 		E6E10BAA1ED9F79E00EB2242 = {
 			isa = PBXGroup;
 			children = (
+				E60A58971EDAB3E600AAEF49 /* fonts */,
 				E6E10BB51ED9F79E00EB2242 /* WeatherApp */,
 				E6E10BCA1ED9F79E00EB2242 /* WeatherAppTests */,
 				E6E10BD51ED9F79E00EB2242 /* WeatherAppUITests */,
@@ -143,7 +154,7 @@
 				E60A58871EDA714100AAEF49 /* BottomBar.swift */,
 				E60A58881EDA714100AAEF49 /* MiniToLargeViewAnimator.swift */,
 				E60A58891EDA714100AAEF49 /* MiniToLargeViewInteractive.swift */,
-				E60A588A1EDA714100AAEF49 /* NextViewController.swift */,
+				E60A588A1EDA714100AAEF49 /* SettingsController.swift */,
 				E6E10BE81EDA056700EB2242 /* controllers */,
 				E6E10BB61ED9F79E00EB2242 /* AppDelegate.swift */,
 				E6E10BBA1ED9F79E00EB2242 /* Main.storyboard */,
@@ -307,6 +318,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E60A589C1EDAB58300AAEF49 /* SFDisplay-Thin.otf in Resources */,
 				E6E10BC11ED9F79E00EB2242 /* LaunchScreen.storyboard in Resources */,
 				E6E10BBE1ED9F79E00EB2242 /* Assets.xcassets in Resources */,
 				E6E10BBC1ED9F79E00EB2242 /* Main.storyboard in Resources */,
@@ -473,7 +485,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E6E10BB71ED9F79E00EB2242 /* AppDelegate.swift in Sources */,
-				E60A58901EDA714100AAEF49 /* NextViewController.swift in Sources */,
+				E60A58901EDA714100AAEF49 /* SettingsController.swift in Sources */,
 				E60A588D1EDA714100AAEF49 /* BottomBar.swift in Sources */,
 				E6E10BE71EDA003700EB2242 /* WeatherController+handlers.swift in Sources */,
 				E6E10BE51ED9FE7700EB2242 /* WeatherController.swift in Sources */,

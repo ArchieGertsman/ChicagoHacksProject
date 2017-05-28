@@ -20,12 +20,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         window?.rootViewController = UINavigationController(rootViewController: WeatherController())
         
+        /*
         WeatherController.getTodaysMessage { (title, message) in
             guard let title = title else { return }
             guard let message = message else { return }
             
-            WeatherController.setUpLocalNotification(hour: 0, minute: 55, title: title, message: message)
-        }
+            WeatherController.setUpLocalNotification(hour: 1, minute: 4, title: title, message: message)
+        }*/
         
         return true
     }

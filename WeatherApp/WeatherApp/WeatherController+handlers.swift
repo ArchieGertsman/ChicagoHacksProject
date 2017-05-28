@@ -13,7 +13,146 @@ import NotificationCenter
 extension WeatherController {
     
     func initAppearence() {
-        self.view.backgroundColor = .white
+        let current_hour = Calendar.current.component(.hour, from: Date())
+        
+        let latitude = WeatherController.current_location.coordinate.latitude
+        let longitude = WeatherController.current_location.coordinate.longitude
+        
+        print("https://api.darksky.net/forecast/\(WeatherController.key)/\(latitude),\(longitude)")
+        
+        WeatherController.getWeatherData(withURL: "https://api.darksky.net/forecast/\(WeatherController.key)/\(latitude),\(longitude)", completion: { (data) in
+            
+            guard let current_data = data["currently"] as? NSDictionary else { return }
+            guard let precip = current_data["icon"] as? String else { return }
+            guard let temp = current_data["temperature"] as? Double else { return }
+            guard let apparent_temp = current_data["apparentTemperature"] as? Double else { return }
+            guard let percip_chance = current_data["precipProbability"] as? Double else { return }
+            guard let humidity = current_data["humidity"] as? Double else { return }
+            guard let wind_speed = current_data["windSpeed"] as? Double else { return }
+            
+            self.current_temperature = temp
+            self.feels_like_temperature = apparent_temp
+            self.precipitation_chance = percip_chance
+            self.humidity = humidity
+            self.wind_speed = wind_speed
+                
+            if current_hour >= 5 && current_hour < 7 {
+                
+                switch precip {
+                case "rain", "hail":
+                    self.initDetails("Rain", #imageLiteral(resourceName: "Rain"), #imageLiteral(resourceName: "Gradient_Rain"))
+                case "snow", "sleet":
+                    self.initDetails("Snow", #imageLiteral(resourceName: "Snow"), #imageLiteral(resourceName: "Gradient_Rain"))
+                case "cloudy":
+                    self.initDetails("Cloudy", #imageLiteral(resourceName: "Clouds"), #imageLiteral(resourceName: "Gradient_Sunrise"))
+                case "partly-cloudy-day":
+                    self.initDetails("Partly Cloudy", #imageLiteral(resourceName: "CloudSun"), #imageLiteral(resourceName: "Gradient_Sunrise"))
+                default:
+                    self.initDetails("Clear", #imageLiteral(resourceName: "Sun"), #imageLiteral(resourceName: "Gradient_Sunrise"))
+                }
+                
+            }
+            else if current_hour >= 7 && current_hour < 18 {
+                
+                switch precip {
+                case "rain", "hail":
+                    self.initDetails("Rain", #imageLiteral(resourceName: "Rain"), #imageLiteral(resourceName: "Gradient_Rain"))
+                case "snow", "sleet":
+                    self.initDetails("Snow", #imageLiteral(resourceName: "Snow"), #imageLiteral(resourceName: "Gradient_Rain"))
+                case "cloudy":
+                    self.initDetails("Cloudy", #imageLiteral(resourceName: "Clouds"), #imageLiteral(resourceName: "Gradient_Sunrise"))
+                case "partly-cloudy-day":
+                    self.initDetails("Partly Cloudy", #imageLiteral(resourceName: "CloudSun"), #imageLiteral(resourceName: "Gradient_Sunrise"))
+                default:
+                    self.initDetails("Sunny", #imageLiteral(resourceName: "Sun"), #imageLiteral(resourceName: "Gradient_Day"))
+                }
+                
+            }
+            else if current_hour >= 18 && current_hour < 20 {
+                
+                switch precip {
+                case "rain", "hail":
+                    self.initDetails("Rain", #imageLiteral(resourceName: "Rain"), #imageLiteral(resourceName: "Gradient_Rain"))
+                case "snow", "sleet":
+                    self.initDetails("Snow", #imageLiteral(resourceName: "Snow"), #imageLiteral(resourceName: "Gradient_Rain"))
+                case "cloudy":
+                    self.initDetails("Cloudy", #imageLiteral(resourceName: "Clouds"), #imageLiteral(resourceName: "Gradient_Sunrise"))
+                case "partly-cloudy-day":
+                    self.initDetails("Partly Cloudy", #imageLiteral(resourceName: "CloudSun"), #imageLiteral(resourceName: "Gradient_Sunrise"))
+                default:
+                    self.initDetails("Clear", #imageLiteral(resourceName: "Sun"), #imageLiteral(resourceName: "Gradient_Sunrise"))
+                }
+                
+            }
+            else {
+                self.initDetails("Night", #imageLiteral(resourceName: "Moon"), #imageLiteral(resourceName: "Gradient_Night"))
+            }
+            
+        })
+
+    }
+    
+    func configure(withMeasurementSystem system: SettingsController.MeasurementSystem) {
+        if system == .imperial {
+            // celcius to fahrenheit
+            self.current_temperature = fahrenheit(fromCelcius: self.current_temperature)
+            self.feels_like_temperature = fahrenheit(fromCelcius: self.feels_like_temperature)
+            self.wind_speed = mph(fromKmph: self.wind_speed)
+        } else {
+            // fahrenheit to celcius
+            self.current_temperature = celcius(fromFahrenheit: self.current_temperature)
+            self.feels_like_temperature = celcius(fromFahrenheit: self.feels_like_temperature)
+            self.wind_speed = kmph(fromMph: self.wind_speed)
+        }
+    }
+    
+    func celcius(fromFahrenheit deg: Double) -> Double {
+        return (deg - 32.0) * (5.0/9.0)
+    }
+    
+    func fahrenheit(fromCelcius deg: Double) -> Double {
+        return deg * (9.0/5.0) + 32.0
+    }
+    
+    func mph(fromKmph s: Double) -> Double {
+        return 0.621371 * s
+    }
+    
+    func kmph(fromMph s: Double) -> Double {
+        return 1.60934 * s
+    }
+    
+    func initDetails(_ text: String, _ image: UIImage, _ background: UIImage) {
+        self.weather_icon_label.text = text
+        self.weather_icon_view.image = image
+        self.background_image_view.image = background
+    }
+    
+    func prepareView() {
+        bottomBar = BottomBar()
+        bottomBar.button.addTarget(self, action: #selector(self.bottomButtonTapped), for: .touchUpInside)
+        bottomBar.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(bottomBar)
+        
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[bottomBar]-0-|", options: [], metrics: nil, views: ["bottomBar": bottomBar]))
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[bottomBar(\(BottomBar.bottomBarHeight))]-0-|", options: [], metrics: nil, views: ["bottomBar": bottomBar]))
+        
+        nextViewController = SettingsController()
+        nextViewController.rootViewController = self
+        nextViewController.transitioningDelegate = self
+        nextViewController.modalPresentationStyle = .overCurrentContext
+        
+        presentInteractor = MiniToLargeViewInteractive()
+        presentInteractor.attachToViewController(viewController: self, withView: bottomBar, presentViewController: nextViewController)
+        dismissInteractor = MiniToLargeViewInteractive()
+        dismissInteractor.attachToViewController(viewController: nextViewController, withView: nextViewController.view, presentViewController: nil)
+    }
+    
+    func bottomButtonTapped() {
+        disableInteractivePlayerTransitioning = true
+        self.present(nextViewController, animated: true) { [unowned self] in
+            self.disableInteractivePlayerTransitioning = false
+        }
     }
     
     func initLocation() {
@@ -26,7 +165,7 @@ extension WeatherController {
         if CLLocationManager.locationServicesEnabled() {
             location_manager.delegate = self
             location_manager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-            location_manager.startMonitoringSignificantLocationChanges()
+            location_manager.startUpdatingLocation()
         }
     }
     
@@ -63,10 +202,6 @@ extension WeatherController {
         guard let a = yesterday_data[0] as? NSDictionary else { return nil }
         guard let temp = a["temperatureMax"] as? Double else { return nil }
         return Int(temp)
-    }
-    
-    func fahrenheit(fromKelvin k: Double) -> Double {
-        return k * (9.0/5.0) - 459.67
     }
     
     static func getTodaysMessage(completion: @escaping (_ title: String?, _ message: String?) -> Void) {
@@ -159,7 +294,7 @@ extension WeatherController {
                                 notification_message = "Put on a raincoat. "
                             }
                             else {
-                                notification_message = "Enjoy the nice weather!. "
+                                notification_message = "Enjoy the nice weather! "
                             }
                             
                         }
@@ -266,6 +401,12 @@ extension WeatherController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: true)
+        
+                
+    }
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
     
 }
@@ -276,31 +417,41 @@ extension WeatherController: CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let loc_value = manager.location!.coordinate
-        
-        if  (WeatherController.current_location.coordinate.latitude  != loc_value.latitude) ||
-            (WeatherController.current_location.coordinate.longitude != loc_value.longitude)
-        {
-            WeatherController.current_location = CLLocation(latitude: loc_value.latitude, longitude: loc_value.longitude)
-            DispatchQueue.main.async {
-                let latitude = WeatherController.current_location.coordinate.latitude
-                let longitude = WeatherController.current_location.coordinate.longitude
-                
-                // today data
-                WeatherController.getWeatherData(withURL: "https://api.darksky.net/forecast/\(WeatherController.key)/\(latitude),\(longitude)", completion: { (data) in
-                    self.setLabels(with: data)
-                    self.today_max_temp = WeatherController.getMaxTemp(with: data)
-                })
-                
-                // yesterday data
-                let seconds_in_a_day = 60 * 60 * 24
-                let yesterday_time = Int(NSDate().timeIntervalSince1970) - seconds_in_a_day
-                WeatherController.getWeatherData(withURL: "https://api.darksky.net/forecast/\(WeatherController.key)/\(latitude),\(longitude),\(yesterday_time)", completion: { (data) in
-                    self.yesterday_max_temp = WeatherController.getMaxTemp(with: data)
-                })
-            }
+        WeatherController.current_location = CLLocation(latitude: loc_value.latitude, longitude: loc_value.longitude)
+        DispatchQueue.main.async {
+            self.initAppearence()
+            self.location_manager.stopUpdatingLocation()
+            self.location_manager.startMonitoringSignificantLocationChanges()
         }
     }
     
+}
+
+extension WeatherController: UIViewControllerTransitioningDelegate {
+    
+    func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        let animator = MiniToLargeViewAnimator()
+        animator.initialY = BottomBar.bottomBarHeight
+        animator.transitionType = .Present
+        return animator
+    }
+    
+    func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        let animator = MiniToLargeViewAnimator()
+        animator.initialY = BottomBar.bottomBarHeight
+        animator.transitionType = .Dismiss
+        return animator
+    }
+    
+    func interactionControllerForPresentation(animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        guard !disableInteractivePlayerTransitioning else { return nil }
+        return presentInteractor
+    }
+    
+    func interactionControllerForDismissal(animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        guard !disableInteractivePlayerTransitioning else { return nil }
+        return dismissInteractor
+    }
 }
 
 
